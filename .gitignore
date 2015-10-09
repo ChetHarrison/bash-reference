@@ -1,12 +1,13 @@
 node_modules
+dist
+build
 test/temp
 .sass-cache
 .grunt
 bower_components
-bower_modules
 .tmp
 tests/bower_components
-reports
+reports/assets
 coverage
-.DS_Store
+deps
 .Ulysses-Group.plist
