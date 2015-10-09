@@ -1,0 +1,23 @@
+{
+  "name": "bash-reference",
+  "version": "0.1.0",
+  "description": "A little reference based of \"Great Bash\" by Carl Albing available",
+  "main": "readme.md",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ChetHarrison/bash-reference.git"
+  },
+  "keywords": [
+    "bash",
+    "shell"
+  ],
+  "author": "Chet Harrison",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ChetHarrison/bash-reference/issues"
+  },
+  "homepage": "https://github.com/ChetHarrison/bash-reference#readme"
+}
