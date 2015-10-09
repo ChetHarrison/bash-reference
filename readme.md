@@ -1,5 +1,8 @@
 # Bash Scripts
 
+A little reference based of "Great Bash" by Carl Albing available
+at O'Reilly.
+
 ### Stardard Out
 
 	ls -l here > lsout
