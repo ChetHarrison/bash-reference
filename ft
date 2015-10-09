@@ -1,0 +1,16 @@
+FN="$1"
+case "$FN" in
+	(*.gif) echo "a gif file"
+			;;
+	*.[Pp][Nn][Gg]) echo "a png file"
+			;;
+	*.jpg | *.JPEG) echo "a jpg file"
+			;;
+	*.tif | *.TIFF) echo "a TIFF file"
+			;;&
+	*.mp3 | *.wav) echo "a music file"
+			;&
+	* ) printf "File '%s' not supported.\n" "$FN"
+		exit 1;
+			;;
+esac

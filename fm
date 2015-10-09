@@ -1,0 +1,12 @@
+declare -A CNT
+while read -a LSOUT
+do
+	if [[ $LSOUT == 'total' ]]; then continue; fi  # filter the count line of ls
+	MON=${LSOUT[5]}
+	let CNT[$MON]++
+done
+
+for NDX in "${!CNT[@]}"
+{
+	printf "%2s %d\n" ${NDX} ${CNT[$NDX]}
+}

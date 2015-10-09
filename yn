@@ -1,0 +1,13 @@
+read -p "Anwer yes or no: " ANS
+
+case "$ANS" in
+	yes) echo "OK"
+		;;
+	no) echo "negative"
+		;;
+	maybe) echo "make up your mind"
+		;;
+	*) echo "you did not follow the instructions."
+		exit 1;
+		;;
+esac

@@ -1,0 +1,4 @@
+while read PERM LN USR GRP SIZ MON DAY YRTM FILENM
+do
+	echo "File: '$FILENM'" is $SIZ bytes long.
+done

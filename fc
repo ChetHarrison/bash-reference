@@ -1,0 +1,10 @@
+while read -a LSOUT  # The -a flag expects an array input
+do
+	DOM=${LSOUT[6]}  # Get the 7th element of the array
+	let CNT[DOM]++
+done
+
+for NDX in "${!CNT[@]}"
+{
+	printf "%2d	%3d\n" ${NDX} ${CNT[NDX]}
+}
