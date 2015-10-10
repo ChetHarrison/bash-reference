@@ -71,7 +71,7 @@ Those 2 commands are equivalent.
 
 	bash -n myscript
 	bash -v myscript
-	bash -x myscript
+	bash -x myscript # this will print out the commands as they happen
 
 -n  Check Syntax (don't execute)
 -v  Echo commands (don't execute)
@@ -201,7 +201,7 @@ The `printf` command works a C `printf`.
 ### Script Arguments
 
 `$1` etc will reference argments within a script in the order they
-appeared in the call.
+appeared in the call. `$0` will be the command name.
 
 	# Contence of simple-copy
 	SRC="$1"
