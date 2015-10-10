@@ -81,6 +81,136 @@ Those 2 commands are equivalent.
 
 	# start with the pound sign
 
+### Chaining Commands Safely
+
+The `&&` operator will proceed to the second command if the first
+one succeeds. The `||` operator will proceed to the second command
+if the first one fails.
+
+	cd /temp && rm *
+
+	cd /temp || echo cd failed
+
+You may want to handel your own errors
+
+	cd /temp 2>/dev/null || { echo cd failed ; exit 1 ; }
+
+this will toss the  stderr echo our message and exit. Note the
+2 commands after the `||` are grouped with the curly braces and
+delimited with a ` ; `. That white space is required syntax. Note
+if we use `()` each command would run in it's own process.
+
+### If Statements
+
+	if cd /tpm 2>/dev/null
+	then
+		echo the cd worked
+	else
+		echo cd failed
+		exit 1
+	fi
+
+	echo continuing on
+	exit 0
+
+Note the exit codes are flipped here. In Bash `1` indicates *failure*
+and `0` indicates *success*.
+
+### Variables
+
+By *convention* variable names have historicly been written in upper
+case. We use the `$` operator to reference the value. For example
+
+	myVar = "foo"
+	echo myVar   		# -> myVar
+	echo $myVar  		# -> foo
+	echo ${myVar}able 	# -> fooable
+
+You can assign commands to variables.
+
+	CMD = ls
+	$CMD 		# executes ls
+
+**Watch your whitespace.** Whitespace
+is a very important part of parsing bash commands. For example:
+
+	myVar = 42	# -> -bash: myVar: command not found
+	myVar=42	# will assign 42 to myVar
+
+Beware that commands often run in a subprocess so we need the
+`export` or the `declare -x` keywords to pass variables.
+
+	export myVar=42
+	declare -x myVar=42
+
+If we had a script that had one line `echo $myVar` and we we then
+did an assignment of the command line to `myVar` then ran our script
+the myVar is not scoped to the subprocess runing the echo and nothing
+would print. If we preceed the command with and assignment to `myVar`
+it will contain that value for the duration of the following command.
+
+	cat showit			# -> echo $myVar
+	myVar=42			# Note we did not export or declare this var
+	./showit			# ->
+	myVar=42 ./showit	# ->
+
+### Return Values
+
+The `?` variable will containt the return value of the preceeding
+script. You will need to cache that value if you need it before
+running another script. For example:
+
+	cd not-here
+	echo $? 		# -> 1
+
+	cd am-here
+	echo $?			# -> 0
+
+### Setting the Promt String
+
+Bash has a command to set the prompt string `PS1`
+
+	echo $PS1 		# -> $
+	PS1="foo" 		# now my promt string is foo
+
+Run a `man bash` and search for "prompting" for all the special
+characters you can use in the promt.
+
+### The Path
+
+	echo $PATH 		# list the paths bash will search for commands on
+	type ls 		# -> ls is hashed (/bin/ls) Find a commands location
+	PATH="$PATH:~/additional-path"  	# adds a new path
+
+Don't use `.` in your path. It will bite you.
+
+### String Formatting
+
+The `printf` command works a C `printf`.
+
+	myVar=42
+	printf "my value is %d\n" $myVar 	# -> my value is 42
+
+`%%` will escape the special meaning of `%`.
+
+* `%x` 		hex
+* `%6.2f`	floating point 6 char width and 2 is precision
+* `%06d`	Zero padded 6 char width decimal
+* `%s` 		String
+
+### Script Arguments
+
+`$1` etc will reference argments within a script in the order they
+appeared in the call.
+
+	# Contence of simple-copy
+	SRC="$1"
+	DEST="$2"
+	cp "$SCR" "$DEST"
+
+	# call script
+	./simple-copy path/to/src path/to/dest
+
 ### Loops
 
 	for VAR
@@ -144,6 +274,8 @@ the list of values. A newline or semicolon ends the list.
 	echo $ANS
 
 ### Convert all jpg to png with Image Magic
+
+[Image Magic](http://www.imagemagick.org/script/index.php)
 
 	for PIC in *.jpg # for all the jpg file in the current dir
 	do
