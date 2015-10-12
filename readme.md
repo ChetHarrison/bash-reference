@@ -462,6 +462,45 @@ We can use integers now in conditionals
 
 	if (( VAR < 2 ))  # evaluates as expected
 
+### Calculatro Example
+
+This a simple reverse Polish notation calculator. Note we can pass
+in the operator. However if we use `*` we need to single quote it
+to escape the pattern matching default behavior like this `'*'`
+or this `\*`.
+
+	# rpn-calc
+	# usage: rpn 2 2 '*'
+
+	# check for valid arg count
+	if (( $# != 3 ))
+	then
+		echo usage: "$0 num num op"
+		exit 1
+	fi
+
+	ANS=$(( $1 $3 $2 ))
+
+	echo $ANS
+
+### Shift to Remove Args
+
+If we wanted calculator that could take a dynamic number of args
+we can use the `shift` keyword.
+
+	# rpn-calc
+
+	ANS=$(( $1 $3 $2 ))
+	shift 3
+
+	while (( $# > 0 ))
+	do
+		ANS=$(( ANS $2 $1 ))
+		shift 2
+	done
+
+	echo $ANS
+
 ### Arrays
 
 set with `VAR[INDEX]` and get with `${VAR[INDEX]}`. The curly braces
