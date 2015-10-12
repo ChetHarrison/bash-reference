@@ -211,6 +211,95 @@ appeared in the call. `$0` will be the command name.
 	# call script
 	./simple-copy path/to/src path/to/dest
 
+`$*` and `$@` will return all the arguments. `$@` is a bit harder to
+explain so here is and example. We will run the following
+`allstar` script on a directory contining file names with
+embedded whitespace.
+
+	# allstar
+	echo
+	echo invike script with '$*'
+	./secondscript $*
+	echo
+	echo invike script with '"$*"'
+	./secondscript "$*"
+	echo
+	echo invike script with '"$@"'
+	./secondscript "$@"
+	echo
+
+	# secondscript
+	echo "invoked with $# arg(s)"
+	echo '1st arg ($1) is "'$1'"'
+	echo '1st arg ($2) is "'$2'"'
+
+The `allstar` script calls the second script with 3 different
+varations of our arguments as `$*`, then `"$*"` then `"$@"`.
+
+	# let's look at the directory
+	echo my*  # -> my car.jpg mycopy mydata myfile mymusic.mp3
+	./allstar my*
+
+we will get the following output:
+
+	invoke script with $*
+	invoked with 6 arg(s)
+	1st arg ($1) is "my"
+	2nd arg ($2) is "car.jpg"
+
+	invoke script with "$*"
+	invoked with 1 arg(s)
+	1st arg ($1) is "my car.jpg mycopy mydata myfile mymusic.mp3"
+	2nd arg ($2) is ""
+
+	invoke script with "$@""
+	invoked with 5 arg(s)
+	1st arg ($1) is "my car.jpg"
+	2nd arg ($2) is "mycopy"
+
+In this context `"$@"` is the argument list you are
+looking for.
+
+### Shell Parameter Substitution and Pattern Matching
+
+If we start with a variable asignment `PIC=abba` we can use
+pattern matching to do some substitutions. For example
+`${PIC%a}` will remove the trailing `a`. Here are some examples
+
+	echo ${PIC}  	# -> abba
+	echo ${PIC%a}  	# -> abb
+	# ? matches any char. * matches 0 or more
+	echo ${PIC%?}  	# -> abb
+	echo ${PIC%b*}  # -> ab
+	# %% largest possible match
+	echo ${PIC%%b*} # -> a
+
+Note this is not RegExp. Here is a jpg to png converter
+
+	PIC=${1}
+	convert "$PIC" "${PIC%.jpg}.png"  # convert and swap extentions
+
+To remove a prefix with `#`.
+
+	echo${PIC#?}  	# -> bba
+	echo${PIC#*}  	# -> abba
+	echo${PIC#*b}  	# -> ba
+	echo${PIC##*b} 	# -> a
+
+Let's parse a `host:path` argument
+
+	FULL=${1}
+	FN=${FULL#*:}
+	HOST=${FULL%:*}
+
+Use `/` to remove from the middle of an argument
+
+	echo ${PIC}  # -> abba
+	echo ${PIC/bb/foo}  # -> afooa
+	# clean up a file name
+	FN='01 Track 01.mp3.mp3'
+	mv "$FN" "${FN/ Track ??.mp3"  # Note how the ? matches 1 character
+
 ### Loops
 
 	for VAR
@@ -341,6 +430,37 @@ Using patern matching is convenitent for parsing args
 			exit 1;
 				;;
 	esac
+
+### Math
+
+Bash is a string based language. `i=5` actually asigns the string
+value "5" to i. To get an integer we use the `declare` or `typeset`
+keywordS.
+
+	declare -i COUNT=0
+	while read PERM LN USR GRP SIZ MON DAY YRTM FILENM
+	do
+		echo "File: '$FILENM'" IS $SIZ bytes long
+		COUNT+=1
+	done
+	echo $COUNT
+
+The keyword `let` or `(())` or `$(())` will evaluate mathmaticaly.
+
+	declare -i COUNT=0
+	while read PERM LN USR GRP SIZ MON DAY YRTM FILENM
+	do
+		COUNT+=1
+		echo "File: '$FILENM'" IS $SIZ bytes long
+		let TOTAL+= SIZ  # same as next 2 statements
+		(( SUM+=SIZ ))
+		ALL=$((ALL+SIZ))
+	done
+	echo $COUNT
+
+We can use integers now in conditionals
+
+	if (( VAR < 2 ))  # evaluates as expected
 
 ### Arrays
 
