@@ -486,9 +486,20 @@ or this `\*`.
 ### Shift to Remove Args
 
 If we wanted calculator that could take a dynamic number of args
-we can use the `shift` keyword.
+we can use the `shift` keyword. This performs the same operation
+as the previous `rpn-calc` with the first three args ans then
+applys the result to the next 2 until we run out of args. For
+input error checking the total number of args should always be
+an odd number so we will use the `%` modulus operator. Also note
+the $0 gets us the name of the function.
 
 	# rpn-calc
+
+	if (( $# < 3 || $# % 2 == 0 ))
+	then
+		echo usage: "$0 num num op [ num op ] ..."
+		exit 1
+	fi
 
 	ANS=$(( $1 $3 $2 ))
 	shift 3
@@ -500,6 +511,166 @@ we can use the `shift` keyword.
 	done
 
 	echo $ANS
+
+### If Statments in Depth
+
+We have seen how if can branch on a
+
+* command's success or failure
+* a numeric comparison
+
+It can also do the following...
+
+	if [ -e $FILENAME ]  # if FILENAME exists
+
+Here is an example of using bash command flags with an `if`.
+
+	for FN in "$@"  # loop through all file names. The quotes preserve white space.
+	do
+		if [ ! -e "$FN" ]
+		then
+			continue
+		fi
+
+		printf "%-15.15s\t" "$FN"
+
+		if [ -d "$FN" ]
+		then
+			printf "%s\n" directory
+			continue
+		fi
+
+		if [ -r "$FN" ]
+		then
+			printf "%s" read
+		fi
+
+		if [ -w "$FN" ]
+		then
+			printf "%s " write
+		fi
+
+		if [ -x "$FN" ]
+		then
+			printf "%s " execute
+		fi
+
+		printf "\n"
+	done
+
+### Tests
+
+Do a `man test` for details.
+
+### RegEx
+
+You can do regular expressions with the following double bracket
+syntax using the `=~` operator.
+
+	if [[ $1 =~ t.*w.*a ]]
+	then
+		echo found it
+	fi
+
+In this case `t.*w.*a` is a regular expression.
+
+### Functions
+
+You declare a function 3 ways
+
+* `function doit`
+* `function doit ()`
+* `doit ()`
+
+For example
+
+	function doit
+	{   # If you placed this in () it would run in a subshell
+		echo doing it $1  # $1 is the first param passed to function
+		FOO=5
+		local BAR=6  # This has function scope.
+	}
+
+	echo before $1  # $1 is the first param passed to script
+
+	doit
+
+	echo $FOO  # vars declaired in a function are available outside.
+
+To be more explicit with your scope you can also use `declare -g FOO`
+within the function to give it global scope. (Avalable in v4.2)
+
+**Example: Find Max File Size**
+
+	# script: fnsum
+	function max ()
+	{
+		if (( ${1} > MAX ))
+		then
+			then MAX=$1
+		fi
+	}
+
+	# comments to remind us of expected input
+	# -rwxr-xr-x  1 chetharrison  staff    203 Oct  9 10:12 fc
+	#      $1    $2      $3         $4      $5  $6 $7   $8  $9
+	function lsparse ()
+	{
+		if (( $# < 9 ))
+		then
+			SIZ=-1
+		else
+			SIZ=$5
+		fi
+	}
+
+	declare -i CNT MAX=-1
+	while read lsline
+	do
+		let CNT++
+		lsparse $lsline
+		max $SIZ
+	done
+
+We would run it like this:
+
+	ls -l | bash fnsum  # -> largest of 50 file was: 17238
+
+Note function return values are used for `stdout` and `stderr`
+so we need to use one of the vars declared in the function with
+script level scope to "return" them.
+
+### Variable Indirection
+
+The `!` operator can be used to dynamicly lookup variable names.
+
+	ABC=5
+	VAR=ABC
+	echo ${!VAR}  # -> 5
+
+This is a good way to keep your funttion vars scoped to the function
+to avoid naming collisions. For example
+
+	function abs ()
+	{
+		local VN=$1
+		if (( ${!VN} < 0 ))
+		then
+			let ${VN}=0-${!VN}
+		fi
+	}
+	for num
+	do
+		printf "ABS($num) = "
+		abs num  # here we are passing the varible name not it's value
+		echo "$num"  # here we argeting the new value modified by the abs function
+	done
+
+### Importing Other Files
+
+The `source` keyword is the way you can import other files in to your
+script. I will look for the file argument by searching the `PATH`
+environment variable.
 
 ### Arrays
 
