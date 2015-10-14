@@ -3,7 +3,7 @@
 A little reference based of "Great Bash" by Carl Albing available
 at O'Reilly.
 
-### Stardard Out
+### Standard Out
 
 	ls -l here > lsout
 
@@ -15,7 +15,7 @@ at O'Reilly.
 	foo bar
 	EOF
 
-### Stardard Error
+### Standard Error
 
 	ls -l not.here 2> lserr
 
@@ -46,9 +46,9 @@ at O'Reilly.
 	bash some-long-process &
 
 This will start another process and run `bash some-long-process &`
-returning controll to the parent process.
+returning control to the parent process.
 
-### Run Multipule Commands (in order)
+### Run Multiple Commands (in order)
 
 	pwd ; ls
 
@@ -91,7 +91,7 @@ if the first one fails.
 
 	cd /temp || echo cd failed
 
-You may want to handel your own errors
+You may want to handle your own errors
 
 	cd /temp 2>/dev/null || { echo cd failed ; exit 1 ; }
 
@@ -118,7 +118,7 @@ and `0` indicates *success*.
 
 ### Variables
 
-By *convention* variable names have historicly been written in upper
+By *convention* variable names have historically been written in upper
 case. We use the `$` operator to reference the value. For example
 
 	myVar = "foo"
@@ -145,8 +145,8 @@ Beware that commands often run in a subprocess so we need the
 
 If we had a script that had one line `echo $myVar` and we we then
 did an assignment of the command line to `myVar` then ran our script
-the myVar is not scoped to the subprocess runing the echo and nothing
-would print. If we preceed the command with and assignment to `myVar`
+the myVar is not scoped to the subprocess running the echo and nothing
+would print. If we preceded the command with and assignment to `myVar`
 it will contain that value for the duration of the following command.
 
 	cat showit			# -> echo $myVar
@@ -156,7 +156,7 @@ it will contain that value for the duration of the following command.
 
 ### Return Values
 
-The `?` variable will containt the return value of the preceeding
+The `?` variable will contain the return value of the preceding
 script. You will need to cache that value if you need it before
 running another script. For example:
 
@@ -166,15 +166,15 @@ running another script. For example:
 	cd am-here
 	echo $?			# -> 0
 
-### Setting the Promt String
+### Setting the Prompt String
 
 Bash has a command to set the prompt string `PS1`
 
 	echo $PS1 		# -> $
-	PS1="foo" 		# now my promt string is foo
+	PS1="foo" 		# now my prompt string is foo
 
 Run a `man bash` and search for "prompting" for all the special
-characters you can use in the promt.
+characters you can use in the prompt.
 
 ### The Path
 
@@ -200,10 +200,10 @@ The `printf` command works a C `printf`.
 
 ### Script Arguments
 
-`$1` etc will reference argments within a script in the order they
+`$1` etc will reference arguments within a script in the order they
 appeared in the call. `$0` will be the command name.
 
-	# Contence of simple-copy
+	# Contents of simple-copy
 	SRC="$1"
 	DEST="$2"
 	cp "$SCR" "$DEST"
@@ -213,18 +213,18 @@ appeared in the call. `$0` will be the command name.
 
 `$*` and `$@` will return all the arguments. `$@` is a bit harder to
 explain so here is and example. We will run the following
-`allstar` script on a directory contining file names with
+`allstar` script on a directory containing file names with
 embedded whitespace.
 
 	# allstar
 	echo
-	echo invike script with '$*'
+	echo invoke script with '$*'
 	./secondscript $*
 	echo
-	echo invike script with '"$*"'
+	echo invoke script with '"$*"'
 	./secondscript "$*"
 	echo
-	echo invike script with '"$@"'
+	echo invoke script with '"$@"'
 	./secondscript "$@"
 	echo
 
@@ -234,7 +234,7 @@ embedded whitespace.
 	echo '1st arg ($2) is "'$2'"'
 
 The `allstar` script calls the second script with 3 different
-varations of our arguments as `$*`, then `"$*"` then `"$@"`.
+variations of our arguments as `$*`, then `"$*"` then `"$@"`.
 
 	# let's look at the directory
 	echo my*  # -> my car.jpg mycopy mydata myfile mymusic.mp3
@@ -262,7 +262,7 @@ looking for.
 
 ### Shell Parameter Substitution and Pattern Matching
 
-If we start with a variable asignment `PIC=abba` we can use
+If we start with a variable assignment `PIC=abba` we can use
 pattern matching to do some substitutions. For example
 `${PIC%a}` will remove the trailing `a`. Here are some examples
 
@@ -277,7 +277,7 @@ pattern matching to do some substitutions. For example
 Note this is not RegExp. Here is a jpg to png converter
 
 	PIC=${1}
-	convert "$PIC" "${PIC%.jpg}.png"  # convert and swap extentions
+	convert "$PIC" "${PIC%.jpg}.png"  # convert and swap extensions
 
 To remove a prefix with `#`.
 
@@ -332,7 +332,7 @@ current working directory and copy them to the `/media/mp3`
 relative directory. The quotes insure that whitespace in
 the file name does not break the script.
 
-The resurved word `in` separates the loop variable from
+The reserved word `in` separates the loop variable from
 the list of values. A newline or semicolon ends the list.
 
 ### Numeric Loops
@@ -386,7 +386,7 @@ the list of values. A newline or semicolon ends the list.
 		let i++
 	done
 
-The `(())` indicates an arithmatic expression. The while loop
+The `(())` indicates an arithmetic expression. The while loop
 can operate on a pipeline of commands as a predicate.
 
 	while read PERM LN USR GRP SIZ MON DAY YRTM FILENM
@@ -398,7 +398,7 @@ can operate on a pipeline of commands as a predicate.
 
 ### Case Statements
 
-	read -p "Anwer yes or no: " ANS
+	read -p "Answer yes or no: " ANS
 
 	case "$ANS" in
 		yes) echo "OK"
@@ -412,7 +412,7 @@ can operate on a pipeline of commands as a predicate.
 			;;
 	esac
 
-Using patern matching is convenitent for parsing args
+Using pattern matching is convenient for parsing args
 
 	FN="$1"
 	case "$FN" in
@@ -433,7 +433,7 @@ Using patern matching is convenitent for parsing args
 
 ### Math
 
-Bash is a string based language. `i=5` actually asigns the string
+Bash is a string based language. `i=5` actually assigns the string
 value "5" to i. To get an integer we use the `declare` or `typeset`
 keywordS.
 
@@ -445,7 +445,7 @@ keywordS.
 	done
 	echo $COUNT
 
-The keyword `let` or `(())` or `$(())` will evaluate mathmaticaly.
+The keyword `let` or `(())` or `$(())` will evaluate mathematically.
 
 	declare -i COUNT=0
 	while read PERM LN USR GRP SIZ MON DAY YRTM FILENM
@@ -462,7 +462,7 @@ We can use integers now in conditionals
 
 	if (( VAR < 2 ))  # evaluates as expected
 
-### Calculatro Example
+### Calculator Example
 
 This a simple reverse Polish notation calculator. Note we can pass
 in the operator. However if we use `*` we need to single quote it
@@ -488,7 +488,7 @@ or this `\*`.
 If we wanted calculator that could take a dynamic number of args
 we can use the `shift` keyword. This performs the same operation
 as the previous `rpn-calc` with the first three args ans then
-applys the result to the next 2 until we run out of args. For
+applies the result to the next 2 until we run out of args. For
 input error checking the total number of args should always be
 an odd number so we will use the `%` modulus operator. Also note
 the $0 gets us the name of the function.
@@ -512,7 +512,7 @@ the $0 gets us the name of the function.
 
 	echo $ANS
 
-### If Statments in Depth
+### If Statements in Depth
 
 We have seen how if can branch on a
 
@@ -585,7 +585,7 @@ You declare a function 3 ways
 For example
 
 	function doit
-	{   # If you placed this in () it would run in a subshell
+	{   # If you placed this in () it would run in a sub shell
 		echo doing it $1  # $1 is the first param passed to function
 		FOO=5
 		local BAR=6  # This has function scope.
@@ -595,10 +595,10 @@ For example
 
 	doit
 
-	echo $FOO  # vars declaired in a function are available outside.
+	echo $FOO  # vars declared in a function are available outside.
 
 To be more explicit with your scope you can also use `declare -g FOO`
-within the function to give it global scope. (Avalable in v4.2)
+within the function to give it global scope. (Available in v4.2)
 
 **Example: Find Max File Size**
 
@@ -642,13 +642,13 @@ script level scope to "return" them.
 
 ### Variable Indirection
 
-The `!` operator can be used to dynamicly lookup variable names.
+The `!` operator can be used to dynamically lookup variable names.
 
 	ABC=5
 	VAR=ABC
 	echo ${!VAR}  # -> 5
 
-This is a good way to keep your funttion vars scoped to the function
+This is a good way to keep your function vars scoped to the function
 to avoid naming collisions. For example
 
 	function abs ()
@@ -662,8 +662,8 @@ to avoid naming collisions. For example
 	for num
 	do
 		printf "ABS($num) = "
-		abs num  # here we are passing the varible name not it's value
-		echo "$num"  # here we argeting the new value modified by the abs function
+		abs num  # here we are passing the variable name not it's value
+		echo "$num"  # here we targeting the new value modified by the abs function
 	done
 
 ### Importing Other Files
@@ -675,7 +675,7 @@ environment variable.
 ### Arrays
 
 set with `VAR[INDEX]` and get with `${VAR[INDEX]}`. The curly braces
-forces bash to interprate the [] as a dereference rather than a
+forces bash to interpret the [] as a dereference rather than a
 matching pattern syntax. Note the `declare` keyword to indicate we
 would like an array.
 
@@ -735,7 +735,7 @@ modify our script to filter 0 count values.
 
 ### Associative Arrays (Dictionarys)
 
-This is available in bash v4. We delare the array with a `-A` flag as in
+This is available in bash v4. We declare the array with a `-A` flag as in
 `declare -A ASA`. The we can use string keys/indexes.
 
 	declare -A CNT
@@ -750,3 +750,128 @@ This is available in bash v4. We delare the array with a `-A` flag as in
 	{
 		printf "%2s %d\n" ${NDX} ${CNT[$NDX]}
 	}
+
+### Adding Options to Your Script
+
+Use `getopts` to parse options in your scripts. Check out the
+`getopts` man page.
+
+Some flags require a trailing argument like `doit -f filename`. To parse
+that you can use `getopts` using the `$OPTARG` variable. With in the case
+statement its value will pertain to the argument associated with that
+option. If you have more than one you will need to save `$OPTARG` to
+another variable as it will be overwritten in each of the case statements
+
+	# lsumo
+	#
+	# read (and parse) the ls -l output
+	#
+	# -rwxr-xr-x  1 chetharrison  staff    895 Oct 14 08:47 arg
+	# -rwxr-xr-x  1 chetharrison  staff    203 Oct  9 10:12 fc
+	#
+	# options:
+	# -a - print an average file size
+	# -c - print a file count
+	# -t - print a total file size
+	# -u user - only count files for this user
+
+	while getopts "actu:" FLAG  # define flags in alphabetical order by convention. Note the `u:` option means it takes an arg.
+	do
+		case $FLAG in
+		a) AFLAG=set  # set is an arbitrary value that simple means the AFLAG is not null.
+			;;
+		c) CFLAG=set
+			;;
+		t) TFLAG=set
+			;;
+		u) UVAL="$OPTARG"  # UFLAG is set to the associated argument value here
+			;;
+		*) echo "usage: ${0##*/} [-a] [-c] [-t] [-u username]"
+		   echo "example: ls -l | ${0##} -ac"
+		   exit 1
+		   	;;
+		esac
+	done >&2  # sending stderr to stdout is good practice
+
+	declare -i COUNT=0
+
+	while read PERM LN USR GRP SIZ MON DAY YRTM FILENM
+	do
+		if [[ ! $FILENM ]] ; then continue ; fi
+		if [[ ! "$UVAL" && "$USR" != "$UVAL" ]] ; then continue ; fi
+		COUNT+=1
+		[[ $VFLAG ]] && echo "File: '$FILENM' IS $SIZ bytes long."
+		(( TOTAL += SIZ ))
+	done
+	[[ $CFLAG ]] && echo $COUNT files.  # this is an if statment hack
+	[[ $TFLAG && $TOTAL ]] && echo $TOTAL bytes total.
+	if [[ $AFLAG && (( COUNT > 0 )) ]]
+	then
+		let "AVG=($TOTAL+($COUNT/2))/$COUNT"
+		printf "%d bytes per file on average\n" $AVG
+	fi
+
+### Handling Sub Shells
+
+When you use a pipe `|` the commands on either side of the pipe are
+run in different shells. This can cause some problems with variables
+as they will live only as long as the shell that runs them.
+
+If we modified the lsumo to internalize the `ls -l` command and pipe
+that into the `while read` both of them are run in sub shells when
+the while read hits the `done` statement the modified values in the
+while loop are lost and the parent script looks at its version of
+variable values.
+
+The simple solution is to curly brace all of the code that needs
+access to those variables.
+
+	# lsump
+	#
+	# read (and parse) the ls -l output
+	#
+	# -rwxr-xr-x  1 chetharrison  staff    895 Oct 14 08:47 arg
+	# -rwxr-xr-x  1 chetharrison  staff    203 Oct  9 10:12 fc
+	#
+	# options:
+	# -a - print an average file size
+	# -c - print a file count
+	# -t - print a total file size
+	# -u user - only count files for this user
+
+	while getopts "actu:" FLAG  # define flags in alphabetical order by convention. Note the `u:` option means it takes an arg.
+	do
+		case $FLAG in
+		a) AFLAG=set  # set is an arbitrary value that simple means the AFLAG is not null.
+			;;
+		c) CFLAG=set
+			;;
+		t) TFLAG=set
+			;;
+		u) UVAL="$OPTARG"  # UFLAG is set to the associated argument value here
+			;;
+		*) echo "usage: ${0##*/} [-a] [-c] [-t] [-u username]"
+		   echo "example: ${0##} -ac -u user"
+		   exit 1
+		   	;;
+		esac
+	done >&2  # sending stderr to stdout is good practice
+
+	declare -i COUNT=0
+
+	ls -l | { while read PERM LN USR GRP SIZ MON DAY YRTM FILENM  # start of subshell block
+	do
+		if [[ ! $FILENM ]] ; then continue ; fi
+		if [[ ! "$UVAL" && "$USR" != "$UVAL" ]] ; then continue ; fi
+		COUNT+=1
+		[[ $VFLAG ]] && echo "File: '$FILENM' IS $SIZ bytes long."
+		(( TOTAL += SIZ ))
+	done
+	[[ $CFLAG ]] && echo $COUNT files.  # this is an if statment hack
+	[[ $TFLAG && $TOTAL ]] && echo $TOTAL bytes total.
+	if [[ $AFLAG && (( COUNT > 0 )) ]]
+	then
+		let "AVG=($TOTAL+($COUNT/2))/$COUNT"
+		printf "%d bytes per file on average\n" $AVG
+	fi
+	} # end of sub shell block

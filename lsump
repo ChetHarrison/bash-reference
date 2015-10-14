@@ -1,0 +1,49 @@
+# lsump
+#
+# read (and parse) the ls -l output
+#
+# -rwxr-xr-x  1 chetharrison  staff    895 Oct 14 08:47 arg
+# -rwxr-xr-x  1 chetharrison  staff    203 Oct  9 10:12 fc
+#
+# options:
+# -a - print an average file size
+# -c - print a file count
+# -t - print a total file size
+# -u user - only count files for this user
+
+while getopts "actu:" FLAG  # define flags in alphabetical order by convention. Note the `u:` option means it takes an arg.
+do
+	case $FLAG in
+	a) AFLAG=set  # set is an arbitrary value that simple means the AFLAG is not null.
+		;;
+	c) CFLAG=set
+		;;
+	t) TFLAG=set
+		;;
+	u) UVAL="$OPTARG"  # UFLAG is set to the associated argument value here
+		;;
+	*) echo "usage: ${0##*/} [-a] [-c] [-t] [-u username]"
+	   echo "example: ${0##} -ac -u user"
+	   exit 1
+	   	;;
+	esac
+done >&2  # sending stderr to stdout is good practice
+
+declare -i COUNT=0
+
+ls -l | { while read PERM LN USR GRP SIZ MON DAY YRTM FILENM  # start of subshell block
+do
+	if [[ ! $FILENM ]] ; then continue ; fi
+	if [[ ! "$UVAL" && "$USR" != "$UVAL" ]] ; then continue ; fi
+	COUNT+=1
+	[[ $VFLAG ]] && echo "File: '$FILENM' IS $SIZ bytes long."
+	(( TOTAL += SIZ ))
+done
+[[ $CFLAG ]] && echo $COUNT files.  # this is an if statment hack
+[[ $TFLAG && $TOTAL ]] && echo $TOTAL bytes total.
+if [[ $AFLAG && (( COUNT > 0 )) ]]
+then
+	let "AVG=($TOTAL+($COUNT/2))/$COUNT"
+	printf "%d bytes per file on average\n" $AVG
+fi
+} # end of sub shell block
