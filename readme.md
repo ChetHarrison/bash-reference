@@ -121,7 +121,7 @@ and `0` indicates *success*.
 By *convention* variable names have historically been written in upper
 case. We use the `$` operator to reference the value. For example
 
-	myVar = "foo"
+	myVar="foo"
 	echo myVar   		# -> myVar
 	echo $myVar  		# -> foo
 	echo ${myVar}able 	# -> fooable
