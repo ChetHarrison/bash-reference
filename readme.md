@@ -182,7 +182,9 @@ characters you can use in the prompt.
 	type ls 		# -> ls is hashed (/bin/ls) Find a commands location
 	PATH="$PATH:~/additional-path"  	# adds a new path
 
-Don't use `.` in your path. It will bite you.
+Typically there is a `./bin` path in your environment variable. This
+means you can place your local scripts in a `./bin` directory with
+executable permission a run the script by typing its name.
 
 ### String Formatting
 
