@@ -184,7 +184,7 @@ characters you can use in the prompt.
 
 Typically there is a `./bin` path in your environment variable. This
 means you can place your local scripts in a `./bin` directory with
-executable permission a run the script by typing its name.
+executable permission a run the script by typing it's name.
 
 ### String Formatting
 
