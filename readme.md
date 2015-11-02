@@ -188,7 +188,7 @@ executable permission a run the script by typing it's name.
 
 ### String Formatting
 
-The `printf` command works a C `printf`.
+The `printf` command works like a C `printf`.
 
 	myVar=42
 	printf "my value is %d\n" $myVar 	# -> my value is 42
@@ -877,3 +877,24 @@ access to those variables.
 		printf "%d bytes per file on average\n" $AVG
 	fi
 	} # end of sub shell block
+
+### Other Useful Commands
+
+`less <filename>` will print the contents of filename to the standard
+out. I can be combined with a search.
+
+	less -I -p void *.c   # Case insensitive search for "void" in all .c files
+
+`grep` will search for text in your files. If you get an obtuse error
+message some code somewhere generated it. You can grep it and find
+the source.
+
+	grep -r "Console statements detected" .  # search (recursively) for the term "Console statements detected"
+
+To find files in a specific dir.
+
+	find /path/to/dir -name "filename"
+
+Or
+
+	locate -i filename  # case insensitive flag
